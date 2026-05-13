@@ -17,7 +17,7 @@ Sua tarefa NÃO é responder à pergunta.
 
 Sua tarefa é transformar a pergunta do usuário em uma estrutura curta e útil para:
 1. buscar trechos relevantes no PDF;
-2. orientar o LangExtract sobre o que deve ser extraído.
+2. orientar a extração estruturada sobre o que deve ser extraído.
 
 Pergunta do usuário:
 {question}
@@ -35,7 +35,7 @@ Retorne somente JSON válido no formato abaixo:
     "termo6"
   ],
   "expected_answer_type": "prazo | data | valor | cláusula | obrigação | penalidade | condição | parte | resumo | outro",
-  "langextract_instruction": "instrução curta e direta sobre o que deve ser extraído dos trechos encontrados"
+  "extraction_instruction": "instrução curta e direta sobre o que deve ser extraído dos trechos encontrados"
 }}
 
 Regras:
@@ -45,7 +45,31 @@ Regras:
 - Use termos formais que possam aparecer em contratos, políticas, editais ou documentos oficiais.
 - Inclua sinônimos úteis nos search_terms.
 - Use no máximo 6 termos em search_terms.
-- A langextract_instruction deve ter no máximo 25 palavras.
+- A extraction_instruction deve ter no máximo 25 palavras.
 - Não use markdown.
 - Não escreva nada fora do JSON.
+"""
+
+
+QUERY_MEDIUM_PROMPT = """
+Prepare a pergunta para busca em PDF e extração estruturada de evidências.
+
+Pergunta:
+{question}
+
+Retorne somente JSON válido:
+{{
+  "q": "pergunta reescrita de forma objetiva",
+  "terms": ["termo1","termo2","termo3","termo4","termo5","termo6"],
+  "type": "prazo | data | valor | multa | obrigação | cláusula | condição | resumo | outro",
+  "extract": "instrução curta para extração estruturada"
+}}
+
+Regras:
+- Não responda à pergunta.
+- Não invente dados.
+- Use termos formais comuns em contratos e documentos.
+- terms deve ter no máximo 6 itens.
+- extract deve ter no máximo 20 palavras.
+- Não use markdown.
 """
