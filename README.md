@@ -37,6 +37,10 @@ O fluxo principal usa a API da OpenAI de ponta a ponta. O projeto também manté
 - [Conclusão](#Conclusão)
 
 
+## Imagem da aplicação
+<img width="1857" height="987" alt="imagem_do_projeto" src="https://github.com/user-attachments/assets/765f25e9-75b7-4b27-8148-8140c4278597" />
+
+
 ## Visão geral
 
 A aplicação possui uma interface em Streamlit para upload do PDF e envio da pergunta. O backend extrai texto do PDF com PyMuPDF, prepara a pergunta, seleciona trechos relevantes, extrai evidências estruturadas e gera a resposta final validada com Pydantic.
