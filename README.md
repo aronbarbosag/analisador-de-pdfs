@@ -13,6 +13,13 @@ Aplicação em Python para receber um PDF, aceitar uma pergunta em linguagem nat
 
 O fluxo principal usa a API da OpenAI de ponta a ponta. O projeto também mantém um fluxo bônus com Gemini + LangExtract para comparação de qualidade e custo.
 
+
+
+
+<img width="1620" height="788" alt="fluxo-chamadas" src="https://github.com/user-attachments/assets/abbd12b0-9ee5-45d2-8f43-2662d4f3ea22" />
+
+
+
 ## Sumário
 
 - [Visão geral](#visão-geral)
