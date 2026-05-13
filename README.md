@@ -43,6 +43,7 @@ O fluxo principal usa a API da OpenAI de ponta a ponta. O projeto também manté
 - [Fluxo visual](#Fluxo-visual)
 - [Decisões técnicas](#decisões-técnicas)
 - [Conclusão](#Conclusão)
+- [Comparação desempenho](#Comparação-de-custo-entre-os-modelos (usando o mesmo prompt))
 
 
 ## Imagem da aplicação
@@ -351,3 +352,11 @@ Fluxo bônus comparativo:
 
  LangExtract é uma biblioteca que os desenvolvedores Google fizeram que transforma texto nao estruturado em estruturado, facilitando assim a interpretação por outros modelos.
  Conheci essa biblioteca através de uma postagem no linkedin que vi há algum tempo.
+
+
+
+ ## Comparação de custo entre os modelos (usando o mesmo prompt)
+ ### GPT-5.4-mini  vs Gemini-2.5-Flash
+ <img width="1929" height="673" alt="benchmark" src="https://github.com/user-attachments/assets/5910c758-0552-48e8-845f-b03fb866ecc7" />
+
+ 
