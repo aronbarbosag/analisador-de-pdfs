@@ -1,6 +1,7 @@
 # Analisador de Documentos PDF com IA
 
 Aplicação em Python para receber um PDF, aceitar uma pergunta em linguagem natural e retornar uma resposta útil no formato JSON obrigatório do desafio técnico:
+Essa aplicação não funciona bem para PDFs que contem a informação para responder a pergunta em uma IMAGEM.
 
 ```json
 {
