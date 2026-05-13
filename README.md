@@ -46,11 +46,13 @@ Principais recursos:
 - fluxo bônus Gemini + LangExtract para benchmark;
 - testes unitários e testes de integração opt-in.
 
-## Fluxos disponíveis
+## Duas opções de caminho
 
-### OpenAI completo
+### 1. Usando OpenAI de ponta a ponta
 
-Fluxo recomendado para cumprir o requisito do desafio:
+A ideia não é simplesmente pegar o documento e enviar para IA responder e depois mandar ela formatar a resposta, isso é ineficiente.
+Dito isso o fluxo principal pensado foi o seguinte, na verdade o fluxo principal que eu pensei foi o com Gemini por que eu ja conhecia o LangExtract
+mas como há a exigencia de usar a OpenAi então ficou dessa maneira abaixo.
 
 ```text
 PDF upload
@@ -63,9 +65,10 @@ PDF upload
 -> Streamlit exibe resposta, JSON, tokens e custo
 ```
 
-### Gemini + LangExtract
 
-Fluxo bônus para comparação:
+### 2. Usando Gemini + LangExtract de ponta a ponta
+
+Esse na verdade foi o fluxo pensado primeiro e foi por ele que comecei a elaborar os testes e criar a base da camada de negócio depois foi evoluindo.
 
 ```text
 PDF upload
@@ -81,6 +84,11 @@ PDF upload
 ## Arquitetura
 
 Componentes principais:
+frontend - onde contem a interface que é exposta pro usuário, poderia ser um app desktop, mobile ou outro.
+backend - onde está o core da lógica do dominio
+tests - onde estão os testes automatizados -> testes de unidade + testes de integração para sustentar longevidade do software e ajudar na identificação de erros  + bugs.
+
+Sobre alguns arquivos e a separação das responsabilidades
 
 - `frontend/app.py`: interface Streamlit.
 - `backend/services/pdf_extractor.py`: extração de texto e páginas do PDF.
@@ -96,32 +104,32 @@ Componentes principais:
 
 ```text
 .
-├── assets/
+├── assets/ -> arquivos estáticos utilizados para testes
 │   ├── sample.pdf
 │   └── sample_2.pdf
-├── backend/
+├── backend/ -> lógica central
 │   ├── prompts/
 │   ├── schemas/
 │   └── services/
-├── frontend/
-│   └── app.py
+├── frontend/ -> user interface para interação
+│   └── app.py -> aqui que executa a aplicação
 ├── tests/
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── pyproject.toml
-└── README.md
+├── Dockerfile -> arquivo para replicar o projeto num container
+├── docker-compose.yml -> aplicação containerizada
+├── requirements.txt - > requirements para quem ainda usa pip (ultrapassado já)
+├── pyproject.toml - > arquivo de gestão de projetos modernos em Python semelhante ao package-json do Node JS
+└── README.md -> esse arquivo aqui com algumas isntruções
 ```
 
 ## Variáveis de ambiente
 
-Crie um arquivo`.env` a partir do exemplo na raiz do projeto:
+Crie um arquivo`.env` a partir do exemplo[.example] na raiz do projeto.
 
 ```bash
 cp .env.example .env
 ```
 
-Obrigatório somente o OPENAI_API_KEY o restante é para personalização pode deixar com os valores default ou exclui:
+Obrigatório somente o OPENAI_API_KEY o restante é para personalização.
 
 ```env
 OPENAI_API_KEY=sua-api-key-aqui
@@ -136,13 +144,17 @@ LANGEXTRACT_MAX_CHAR_BUFFER=3000
 
 Para executar apenas o fluxo OpenAI, `OPENAI_API_KEY` é suficiente.
 
+### Antes de tudo rode o git clone no repositorio e depois de o cd na pasta do projeto
+
 ## OPÇÃO 1  - Como executar com Docker
+Requisito: ter o Docker Desktop instalado na maquina e configurado no PATH do sistema
 
 ```bash
 docker compose up --build
 ```
 
 Acesse:
+OBS: Cheque a porta que esta configurada no arquivo docker-compose.yml  caso de erro provavelmente sua porta está ocupada, mude no arquivo
 
 ```text
 http://localhost:8502
@@ -155,6 +167,7 @@ docker compose down
 ```
 
 ## OPÇÃO 2 - Como executar com uv
+Requisito: Ter o gerenciador de pacotes uv instalado e configurado como PATH do sistema
 
 Instale as dependências:
 
@@ -175,6 +188,7 @@ http://localhost:8502
 ```
 
 ## OPÇÃO 3 - Como executar com pip
+Requisito: Ter python3 instalado e configurado no PATH do sistema
 
 Crie e ative um ambiente virtual:
 
@@ -200,13 +214,7 @@ streamlit run frontend/app.py --server.port 8502
 Testes padrão, sem chamadas reais às APIs externas:
 
 ```bash
-uv run pytest -q
-```
-
-Lint:
-
-```bash
-uv run ruff check .
+uv run pytest  -s -v 
 ```
 
 Testes de integração com APIs externas:
@@ -238,7 +246,7 @@ Fórmula usada:
 (tokens_saida / 1.000.000 * preço_saida)
 ```
 
-Conversão:
+Padronização da conversão dolar para real:
 
 ```text
 US$ 1 = R$ 5
@@ -311,7 +319,7 @@ Fluxo bônus comparativo:
 
 ## Decisões técnicas
 
-- A escolha do modelo foi baseada na tabela de preços por modelo | input | output a cada 1kk de tokens, disponível tanto no site da OpenAI Developers como o do Gemini.
+- A escolha do modelo foi baseada na tabela de preços por modelo | input | output a cada 1kk de tokens, disponível tanto no site da OpenAI Developers como o do Gemini além também de testes feitos e medição na pratica do desempenho
 - O fluxo principal usa OpenAI para aderir ao requisito do desafio.
 - A extração OpenAI usa Structured Outputs para reduzir respostas fora do formato.
 - A resposta final é validada com Pydantic antes de ser exibida.
@@ -320,6 +328,7 @@ Fluxo bônus comparativo:
 
 
 ## Conclusão
- No início dos testes o fluxo Gemini + LangExtract superou consideravelmente o desempenho da OpenAI. Somente após configurar mais alguns parametros e implementar chunks que o desempenho ficou parelho, porém pela facilidade, bom desempenho e gratuidade da api do Gemini, acredito que ele merece está nesse mini benchmark como curiosidade.
+ No início dos testes o fluxo Gemini + LangExtract superou consideravelmente o desempenho da OpenAI. Somente após configurar mais alguns parametros e implementar chunks que o desempenho ficou parelho, porém pela facilidade, bom desempenho e gratuidade da api do Gemini,    acredito que ele merece está nesse mini benchmark como curiosidade.
 
- LangExtract é uma biblioteca que os desenvolvedores Google fizeram que transforma texto nao estruturado em estrutura, facilitando assim a interpretação por outros modelos.
+ LangExtract é uma biblioteca que os desenvolvedores Google fizeram que transforma texto nao estruturado em estruturado, facilitando assim a interpretação por outros modelos.
+ Conheci essa biblioteca através de uma postagem no linkedin que vi há algum tempo.
