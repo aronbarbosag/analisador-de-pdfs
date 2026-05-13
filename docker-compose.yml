@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: active-bi-pdf-analyzer
+    env_file:
+      - .env
+    ports:
+      - "8502:8502"
+    volumes:
+      - ./assets:/app/assets:ro
