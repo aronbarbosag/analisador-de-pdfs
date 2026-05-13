@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from backend.prompts.answer_format import QUERY_REWRITE_PROMPT
+from backend.prompts.answer_format import QUERY_GUIDE_INPUT_SHORT, QUERY_GUIDE_INPUT_FULL
 from backend.services.openai_agent import OpenAIAgent
 import pytest
 
@@ -18,9 +18,9 @@ def test_openai_agent_and_token_count():
     question = "Até quando posso cancelar minha assinatura?"
 
     agent_response = agent.generate_response(
-        QUERY_REWRITE_PROMPT.format(question=question)
+        QUERY_GUIDE_INPUT_SHORT.format(question=question)
     )
-    token_count = agent.count_tokens(QUERY_REWRITE_PROMPT.format(question=question))
+    token_count = agent.count_tokens(QUERY_GUIDE_INPUT_SHORT.format(question=question))
 
     print(f"Agent response: {agent_response}")
     print(f"Token count: {token_count}")

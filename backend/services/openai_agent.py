@@ -5,13 +5,11 @@ from backend.services.interfaces.agent_interface import AgentInterface
 
 class OpenAIAgent(AgentInterface):
     def __init__(self, api_key, model="gpt-5.2"):
-        super().__init__(agent_id="openai_agent")
         self.api_key = api_key
         self.client = self.initialize_client()
         self.model = model
 
     def initialize_client(self):
-
         return OpenAI(api_key=self.api_key)
 
     def generate_response(self, prompt):
