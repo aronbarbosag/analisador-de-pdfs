@@ -1,13 +1,16 @@
-class AgentInterface:
-    def __init__(self, agent_id: str):
-        self.agent_id = agent_id
+from abc import ABC, abstractmethod
+from typing import Any
 
-    def send_message(self, message: str) -> None:
-        raise NotImplementedError(
-            "send_message method must be implemented by subclasses"
-        )
 
-    def receive_message(self) -> str:
-        raise NotImplementedError(
-            "receive_message method must be implemented by subclasses"
-        )
+class AgentInterface(ABC):
+    @abstractmethod
+    def initialize_client(self) -> Any:
+        pass
+
+    @abstractmethod
+    def generate_response(self, *args, **kwargs) -> Any:
+        pass
+
+    @abstractmethod
+    def count_tokens(self, *args, **kwargs) -> Any:
+        pass
